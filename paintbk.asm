@@ -19,106 +19,21 @@ xs dw ?
 ys dw ?
 xf dw ?
 yf dw ?
+
+
+
 ColoresY equ maxY + 20
 ColoresX equ 20
 ColoresA equ 20
+
 modX equ ColoresX+ colorCount*ColoresA+200
 modY equ ColoresY
 modW equ 20
 modcount equ 5
-ciclobot dw 0 
-
-cad db 'Error, archivo no encontrado!...presione una tecla para terminar.$' 
-filename db "C:\imagen.bmp" 
-handle dw ?
-imgcol dw 0
-imgren dw 479
-buffer db ?
-colo db ?
 
 
-
+ciclobot dw 0
 ;check
-loadimg macro
- 
- img:
-mov ah, 3dh
-mov al,0
-mov dx, offset filename
-int 21h
-jc err
-mov handle, ax
-
-mov cx,118d
-img1:
-push cx
-mov ah,3fh
-mov bx, handle
-mov dx, offset buffer
-mov cx,1
-int 21h
-pop cx
-loop img1
-
-;mov ah,00h
-;mov al, 18d 
-;int 10h
-
-img2:
-mov ah,3fh
-mov bx, handle
-mov dx,offset buffer
-mov cx,1
-int 21h
-
-mov al,buffer
-and al,11110000b
-ror al,4
-mov colo,al
-mov ah,0ch
-mov al,colo
-mov cx,imgcol 
-mov dx,imgren
-
-int 10h
-
-mov al,buffer
-mov al,00001111b
-mov colo,al
-inc imgcol
-mov ah,0ch
-mov al,colo
-mov cx,imgcol
-mov dx,imgren
-int 10h
-inc imgcol
-mov ah,0ch
-mov al,colo
-mov cx,imgcol
-mov dx,imgren
-int 10h 
-
-cmp imgcol,639d
-jbe img2
-
-mov imgcol,0
-dec imgren
-cmp imgren,-1
-jne img2
-
-
-jmp init
-
-err:
-call apaga
-call cierragraf
-mov ah,09h
-lea dx,cad
-int 21h
-mov ah,07h
-int 21h
-int 20h
-endm 
 
 pushall macro
 push ax
@@ -478,9 +393,6 @@ endm
 eti0:
 call inigraf
 call prende
-loadimg
-
-init:
 ;Se dibuja un cuadrado blanco y una linea que divide el area de trabajo de las herramientas y colores
 mov ac,15d
 dibLinea 0,maxY, maxX,  maxY+1
@@ -663,4 +575,3 @@ mov al,3d
 int 10h
 ret
 endp
-;Linea 666 pq es del diablo 
