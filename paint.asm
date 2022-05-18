@@ -482,15 +482,18 @@ loadimg
 
 init:
 ;Se dibuja un cuadrado blanco y una linea que divide el area de trabajo de las herramientas y colores
+mov ac,0d
+dibLinea 10,10,610,420
+dibLinea 610,30,630,420  
 mov ac,15d
 dibLinea 0,maxY, maxX,  maxY+1
 dibLinea 20,20,60,60 
 ;Se dibuja un cuadrado que indica el espacio que ocupa el boton de salida
-mov ac,4d
-dibLinea 610,00,640,30
+;mov ac,4d
+;dibLinea 610,00,640,30
 mov ac, 15d
 dibColores
-dibmods
+;;dibmods
 
 eti1:
 ;;revisa si hay entrada de teclado o raton
