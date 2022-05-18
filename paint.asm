@@ -9,7 +9,7 @@ ac db 00001010b ;Color auxiliar
 
 pincel dw 0
 
-ListaColores  db 00111111b, 9, 2, 3, 4, 5, 14, 7
+ListaColores  db 00111111b, 9, 2, 3, 4, 5, 14, 8
 colorCount equ $-ListaColores
 
 maxY equ 420
@@ -40,84 +40,96 @@ colo db ?
 
 ;check
 loadimg macro
- 
- img:
-mov ah, 3dh
-mov al,0
-mov dx, offset filename
-int 21h
-jc err
-mov handle, ax
+img0:
+mov ah,3dh 
+mov al,0 
+ mov dx,offset filename 
+ int 21h 
 
-mov cx,118d
+
+
+ jc err 
+ mov handle,ax 
+
+
+
+ mov cx,118d 
 img1:
-push cx
-mov ah,3fh
-mov bx, handle
-mov dx, offset buffer
-mov cx,1
-int 21h
-pop cx
-loop img1
+ push cx
+ mov ah,3fh 
+ mov bx,handle
+ mov dx,offset buffer
+ mov cx,1 
+ int 21h 
+ pop cx
+ loop img1
 
-;mov ah,00h
-;mov al, 18d 
-;int 10h
 
+
+ ;mov ah,00h
+ ;mov al,18d
+ ;int 10h 
+ 
 img2:
-mov ah,3fh
-mov bx, handle
-mov dx,offset buffer
-mov cx,1
-int 21h
+ mov ah,3fh 
+ mov bx,handle
+ mov dx,offset buffer
+ mov cx,1
+ int 21h 
 
-mov al,buffer
-and al,11110000b
-ror al,4
-mov colo,al
-mov ah,0ch
-mov al,colo
-mov cx,imgcol 
-mov dx,imgren
+ mov al,buffer
+ and al,11110000b
+ ror al,4
+ mov colo,al 
+ mov ah,0ch 
+ mov al,colo
+ mov cx,imgcol
+ mov dx,imgren 
+ int 10h 
 
-int 10h
+ mov al,buffer 
+ and al,00001111b
+ mov colo,al 
+ inc imgcol
+ mov ah,0ch 
+ mov al,colo
+ mov cx,imgcol 
+ mov dx,imgren 
+ int 10h 
+ inc imgcol 
+ mov ah,0ch 
+ mov al,colo 
+ mov cx,imgcol 
+ mov dx,imgren 
+ int 10h 
 
-mov al,buffer
-mov al,00001111b
-mov colo,al
-inc imgcol
-mov ah,0ch
-mov al,colo
-mov cx,imgcol
-mov dx,imgren
-int 10h
-inc imgcol
-mov ah,0ch
-mov al,colo
-mov cx,imgcol
-mov dx,imgren
-int 10h 
-
-cmp imgcol,639d
-jbe img2
-
-mov imgcol,0
-dec imgren
-cmp imgren,-1
-jne img2
+ cmp imgcol,639d
+ jbe img2
 
 
-jmp init
+ mov imgcol,0
+ dec imgren
+ cmp imgren,-1 
+ jne img2 
+  jmp init 
+ ;mov ah,07h
+ ;int 21h 
 
+ ;mov ah,00h
+ ;mov al,3d 
+ ;int 10h 
+
+ ;int 20h 
+;***********************************************************************************************************************
 err:
 call apaga
-call cierragraf
-mov ah,09h
-lea dx,cad
-int 21h
-mov ah,07h
-int 21h
-int 20h
+call cierragraf 
+ mov ah,09h
+ lea dx,cad
+ int 21h 
+ mov ah,07h
+ int 21h 
+ int 20h
 endm 
 
 pushall macro
@@ -481,10 +493,7 @@ call prende
 loadimg
 
 init:
-;Se dibuja un cuadrado blanco y una linea que divide el area de trabajo de las herramientas y colores
-mov ac,0d
-dibLinea 10,10,610,420
-dibLinea 610,30,630,420  
+;Se dibuja un cuadrado blanco y una linea que divide el area de trabajo de las herramientas y colores 
 mov ac,15d
 dibLinea 0,maxY, maxX,  maxY+1
 dibLinea 20,20,60,60 
